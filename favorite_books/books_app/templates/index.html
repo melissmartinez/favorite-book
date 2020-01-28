@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>  -->
+    <title>Register and Login</title>
+</head>
+<body>
+    <div class='container mt-3'>
+        <div class='row'>
+            <div class='col'>
+                <h2>Registration</h2>
+                {% if messages %}
+                <ul class="messages">
+                    {% for message in messages %}
+                        {% if 'register' in message.tags %}
+                            <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                        {% endif %}
+                    {% endfor %}
+                </ul>
+                {% endif %}
+                <form action="/" method="POST" id='regform'>
+                    {% csrf_token %}
+                    <input type="hidden" name="reg_or_log" value="reg">
+                    <div class="form-group">
+                        <label for="first_name">First Name</label>
+                        <input type="text" id='first_name' name='first_name' class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="last_name">Last Name</label>
+                        <input type="text" id='last_name' name='last_name' class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="text" id='email' name='email' class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" id='password' name='password' class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="confirm_password">Confirm Password</label>
+                        <input type="password" id='confirm_password' name='confirm_password' class="form-control">
+                    </div>
+                    <button type="submit" class="btn btn-primary">clickin</button>
+                </form>
+            </div>
+            <div class='col'>
+                <h2>Login</h2> 
+                {% if messages %}
+                    {% for message in messages %}
+                        {% if 'login' in message.tags %}
+                            <p>{{ message }}</p>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+                <form action="/" method="POST" id='logform'>
+                    {% csrf_token %}
+                    <input type="hidden" name="reg_or_log" value="log">
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="text" id='email' name='email' class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" id='password' name='password' class="form-control">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Log In</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

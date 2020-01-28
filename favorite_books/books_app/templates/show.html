@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <title>list</title>
+</head>
+<body>
+    <nav class="navbar navbar-light bg-light">
+        <div class="container">
+            <a class="navbar-brand">Welcome {{ user.first_name }}</a>
+            <div class="justify-content-end">
+                <div class='row'>
+                    <a href="/books" class="navbar-item mr-2">Back</a>
+                    <span> | </span>
+                    <a href="/logout" class="navbar-item ml-2">Logout</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                {% if book.creator == user %}
+                {% if messages %}
+                <ul class="messages">
+                    {% for message in messages %}
+                        <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+                    <form action="/books/{{book.id}}" method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" name="book_id" value="{{book.id}}">
+                        <input class="form-control" type="text" name="title" value="{{ book.title }}">
+                {% else %}
+                        <h4>{{ book.title }}</h4>
+                {% endif %}
+                <p>Added by: {{book.creator.first_name}} {{book.creator.last_name}}</p>
+                <p>Added on: {{book.created_at|date:"N d, Y @ g:h a"}}</p>
+                <p>Last updated on: {{book.updated_at|date:"N d, Y @ g:h a"}}</p>
+                {% if book.creator == user %}
+                        <p>Description: </p>
+                        <textarea class="form-control" name="desc" rows="3">{{ book.desc }}</textarea>
+                        <button type="submit" class="btn btn-primary">Update</button>
+                        <a href="/delete/{{book.id}}" class="btn btn-danger">Delete</a>
+                    </form>
+                {% else %}
+                    <p>Description: </p>
+                    <p>{{ book.desc }}</p>
+                {% endif %}
+            </div>
+            <div class="col">
+                <h4>Users who like this book</h4>
+                <ul>
+                    {% for fav_user in book.favorites.all %}
+                    <li>{{fav_user.first_name}} {{fav_user.last_name}} {% if fav_user.id == user.id %} <a href="/unfavorite/{{book.id}}">Un-Favorite</a> {% endif %}</li>
+                    {% endfor %}
+                </ul>
+                {% if user not in book.favorites.all %}
+                <a href="/favorite/{{book.id}}">Add to favorites</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</body>
+</html>
